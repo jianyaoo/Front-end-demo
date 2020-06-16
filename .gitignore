@@ -1,0 +1,8 @@
+config.upload.js
+/node_modules
+/node_modules/
+/.idea/
+/config.upload.js
+/config.upload
+*/node_modules
+*/*/node_modules
