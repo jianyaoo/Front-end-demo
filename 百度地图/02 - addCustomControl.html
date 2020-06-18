@@ -1,0 +1,51 @@
+<!--addControl.html-->
+<!--添加控件演示代码-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=sTpYvX72GpF55dGlnuCuBGfGZcaqiFcW"></script>
+    <title>添加自定义控件</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+    // 01 - 创建Map实例
+    var map = new BMap.Map("allmap");
+
+    // 02 - 初始化地图，设置地图中心点和地图缩放级别
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+
+    // 03 - 声明自定义控件的构造函数
+    function ZoomControl() {
+        this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+        this.defaultOffset = new BMap.Size(10, 10);
+    }
+    ZoomControl.prototype = new BMap.Control();
+    ZoomControl.prototype.initialize = function (map) {
+        // 1 - 创建一个DOM元素
+        var div = document.createElement("div");
+        // 2 - 添加文字说明
+        div.appendChild(document.createTextNode("放大2级"));
+        // 3 - 设置样式
+        div.style.cursor = "pointer";
+        div.style.border = "1px solid gray";
+        div.style.backgroundColor = "white";
+        // 4 - 绑定事件，点击一次放大两级
+        div.onclick = function(e){
+            map.zoomTo(map.getZoom() + 2);
+        }
+        // 5 - 添加DOM元素到地图中
+        map.getContainer().appendChild(div);
+        // 将DOM元素返回
+        return div;
+    }
+
+    map.addControl( new ZoomControl() );
+</script>

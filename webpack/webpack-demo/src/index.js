@@ -24,3 +24,10 @@ function component() {
     return element;
 }
 document.body.appendChild(component());
+
+if (module.hot){
+    module.hot.accept('./print.js' , function () {
+        console.log("接受printMe模块的热模块加载");
+        printMe();
+    })
+}
