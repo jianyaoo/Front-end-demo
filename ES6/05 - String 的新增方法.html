@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字符串的新增方法</title>
+</head>
+<body>
+
+</body>
+<script>
+   let a =  String.fromCodePoint(0x20BB7);
+   let string = String.raw`Hi\\n${2+3}!`;
+
+   let s = 'Hello ES6';
+   console.log(s.includes("Hello"));
+   console.log(s.startsWith("H"));
+   console.log(s.endsWith('6'));
+   console.log(s.includes("ES", 0));
+   console.log(s.startsWith("e", 1));
+   console.log(s.endsWith('e', 2));
+
+   let c = 'abc';
+   console.log(c.repeat(3));
+   // console.log(c.repeat(-3));
+   console.log(c.repeat(0));
+   console.log(c.repeat(2.3));
+   console.log(c.repeat(2.9));
+   console.log(c.repeat(-0.3));
+   console.log(c.repeat('a'));
+   console.log(c.repeat('2'));
+
+   let d = 'a';
+   console.log(d.padStart(5, ''));
+   console.log(d.padStart(5, '0'));
+   console.log(d.padStart(3, 'helloworld'));
+   console.log(d.padEnd(5, ''));
+   console.log(d.padEnd(5, 'b'));
+   console.log(d.padEnd(5, 'helloworld'));
+
+   let e = '   hello world   ';
+   console.log(e.trim());
+   console.log(e.trimStart());
+   console.log(e.trimEnd());
+
+   console.log(a);
+   console.log(string);
+</script>
+</html>

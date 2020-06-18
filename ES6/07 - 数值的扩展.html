@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数值的扩展</title>
+</head>
+<body>
+
+</body>
+<script>
+    console.group("isFinite");
+    console.log(Number.isFinite(15));
+    console.log(Number.isFinite(0.8));
+    console.log(Number.isFinite(NaN));
+    console.log(Number.isFinite(Infinity));
+    console.log(Number.isFinite(-Infinity));
+    console.log(Number.isFinite('foo'));
+    console.log(Number.isFinite('15'));
+    console.log(Number.isFinite(true));
+    console.groupEnd("isFinite");
+
+    console.group('isNaN');
+    console.log(Number.isNaN(15));
+    console.log(Number.isNaN(NaN));
+    console.log(Number.isNaN('15'));
+    console.log(Number.isNaN(15 / NaN));
+    console.log(Number.isNaN(true));
+    console.log(Number.isNaN(true / 0));
+    console.log(Number.isNaN(true / true));
+    console.log(Number.isNaN('true' / 'true'));
+    console.groupEnd();
+
+    console.group("parseInt and parseFloat");
+    console.log(Number.parseInt === parseInt);
+    console.log(Number.parseFloat === parseFloat);
+    console.log(Number.parseInt(3.201));
+    console.log(Number.parseInt(3.987));
+    console.log(Number.parseFloat(2));
+    console.log(Number.parseFloat(2.302));
+    console.log(Number.parseInt('3.201'));
+    console.log(Number.parseInt('3.987'));
+    console.log(Number.parseFloat('2'));
+    console.log(Number.parseFloat('2.302hdakhdkj'));
+    console.groupEnd();
+
+    console.group("isInteger");
+    console.log(Number.isInteger(999));
+    console.log(Number.isInteger(999.0));
+    console.log(Number.isInteger(999.8));
+    console.log(Number.isInteger(true));
+    console.log(Number.isInteger('15'));
+    console.log(Number.isInteger('true'));
+    console.groupEnd();
+
+    console.group('EPSILON');
+    console.log(Number.EPSILON === Math.pow(2, -52));
+    console.log(Number.EPSILON);
+    console.log(Number.EPSILON.toFixed(20));
+    console.groupEnd();
+
+    console.group("isSafeInteger");
+    console.log(Number.MAX_SAFE_INTEGER);
+    console.log(Number.MIN_SAFE_INTEGER);
+    console.log(Number.MAX_SAFE_INTEGER  === -Number.MIN_SAFE_INTEGER);
+    console.log(Number.MIN_SAFE_INTEGER === -(Math.pow(2, 53) - 1));
+    console.log(Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1);
+    console.log(Number.isSafeInteger('aa'));
+    console.log(Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1));
+    console.log(Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1));
+    console.log(Number.isSafeInteger(123));
+    console.groupEnd();
+
+    console.group("Math.trunc");
+    console.log(Math.trunc(4.1));
+    console.log(Math.trunc(4.8));
+    console.log(Math.trunc(-4.1));
+    console.log(Math.trunc(-4.8));
+    console.log(Math.trunc(null));
+    console.log(Math.trunc('12.215'));
+    console.log(Math.trunc(true));
+    console.log(Math.trunc(false));
+    console.log(Math.trunc(NaN));
+    console.log(Math.trunc('foo'));
+    console.log(Math.trunc(undefined));
+    console.groupEnd()
+
+    console.group('Math.sign');
+    console.log(Math.sign(1));
+    console.log(Math.sign(-1));
+    console.log(Math.sign(0));
+    console.log(Math.sign(-0));
+    console.log(Math.sign(NaN));
+    console.log(Math.sign(''));
+    console.log(Math.sign('9'));
+    console.log(Math.sign('-9'));
+    console.log(Math.sign(true));
+    console.log(Math.sign(false));
+    console.groupEnd();
+
+    console.group('Math.cbrt');
+    console.log(Math.cbrt(8));
+    console.log(Math.cbrt('8'));
+    console.log(Math.cbrt('hello'));
+    console.groupEnd();
+</script>
+</html>
