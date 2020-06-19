@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数的扩展</title>
+</head>
+<body>
+
+</body>
+<script>
+    console.group("默认参数");
+    // 默认参数
+    let log = function (a , b = 'world') {
+        console.log(a,b);
+    };
+    console.group("默认参数");
+    log('hello');
+    log('hello','function');
+    log('hello','');
+    console.groupEnd();
+
+    // 对参数进行解构赋值
+    let log2 = function ({ x , y = 5 }) {
+        console.log(x, y);
+    }
+    console.group("默认参数与解构赋值");
+    log2({});
+    log2({ x:2 , y:1 });
+    log2({ x:3 ,});
+    // log2(); 直接执行会报错，因为参数为undefined，不能解构
+    console.groupEnd();
+
+    // 双重默认值
+    let log3 = function ({x , y = 5} = {}) {
+        console.log(x,y);
+    };
+    console.group("默认参数");
+    log3();
+    log3({});
+    log3({x:1});
+    log3({x:1,y:2});
+    console.groupEnd();
+
+    // 两种默认值的对比
+    // 写法一
+    function m1({x = 0, y = 0} = {}) {
+        return [x, y];
+    }
+    // 写法二
+    function m2({x, y} = { x: 0, y: 0 }) {
+        console.log([x,y]);
+    }
+    console.group("默认值对比");
+    m1(); // [0, 0]
+    m2();// [0, 0]
+
+    // x 和 y 都有值的情况
+    m1({x: 3, y: 8}) ;// [3, 8]
+    m2({x: 3, y: 8}); // [3, 8]
+
+    // x 有值，y 无值的情况
+    m1({x: 3}); // [3, 0]
+    m2({x: 3}); // [3, undefined]
+
+    // x 和 y 都无值的情况
+    m1({}); // [0, 0];
+    m2({}); // [undefined, undefined]
+
+    m1({z: 3}) ;// [0, 0]
+    m2({z: 3}) ;// [undefined, undefined]
+    console.groupEnd();
+
+    //默认参数的应用1 - 必要参数
+    function throwIfMissing() {
+        throw new Error('Missing parameter');
+    }
+    function foo4(mustParam = throwIfMissing()) {
+        console.log(mustParam);
+    }
+    // foo4();
+
+    // 默认参数应用2 - 可省略参数
+    function foo5(ops = undefined){
+
+    };
+    console.groupEnd();
+
+    console.group("rest");
+    function add(...values) {
+        let sum = 0;
+        for (let val of values){
+            sum +=val;
+        }
+        console.log(sum);
+        return sum;
+    }
+    add(1,2,3);
+    add(1,2,3,4,5);
+
+    // name 属性
+    console.group("name属性");
+    function a() {}
+    console.log(a.name);
+    let b = function () {}
+    console.log(b.name);
+    let c = function d() {}
+    console.log(c.name);
+    console.groupEnd();
+</script>
+</html>
