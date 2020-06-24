@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组的扩展</title>
+</head>
+<body>
+<script>
+    console.group("扩展运算符");
+    console.log(...[1,2,3]);
+    console.log(1, ...[2, 3, 4], 5);
+    console.groupEnd();
+
+    console.group("扩展运算符 - 应用");
+    // 在数组后面追加数组
+    let arr1 = [1,2,3];
+    let arr2 = [3,4,5];
+    let newArrar = [...arr1 , ...arr2];
+    console.log(newArrar);
+    arr1.push(...arr2)
+    console.log(arr1);
+    console.groupEnd();
+
+    console.group("Array.from");
+    let arrayLike = {
+        '0': 'a',
+        '1': 'b',
+        '2': 'c',
+        length: 3
+    };
+    let arr22 = Array.from(arrayLike); // ['a', 'b', 'c']
+    console.log(arr22);
+    // arguments对象
+    function foo() {
+        var args = Array.from(arguments);
+        console.log(args);
+    }
+    foo(1,2,3,4)
+    console.groupEnd()
+
+    console.group("Array.of");
+    console.log(Array.of()); // []
+    console.log(Array.of(undefined)); // [undefined]
+    console.log(Array.of(1)); // [1]
+    console.log(Array.of(1, 2)); // [1, 2]
+    console.groupEnd()
+</script>
+</body>
+</html>
