@@ -1,4 +1,5 @@
-var Client = require('ssh2').Client;
+// 基于node-scp2的自动化部署方案 - 优化版2 - 上传文件前备份旧版文件
+let Client = require('ssh2').Client;
 const scpClient = require('scp2');
 const ora = require('ora');
 const chalk = require('chalk');
@@ -11,9 +12,9 @@ function deployFile() {
     let { path , rootPath , rootFolder } = server ;
     let currentTime = new Date().toLocaleDateString();
     let cmd = `cd ${rootPath}\n
-mkdir -p _backUp/${rootFolder}_${currentTime}\n 
-cp -r ${path} ${rootPath}_backUp/${rootFolder}_${currentTime}/\n 
-rm -rf ${path}`;
+                mkdir -p _backUp/${rootFolder}_${currentTime}\n 
+                cp -r ${path} ${rootPath}_backUp/${rootFolder}_${currentTime}/\n 
+                rm -rf ${path}`;
 
     conn.on('ready', function () {
         conn.exec( cmd,
@@ -45,7 +46,6 @@ rm -rf ${path}`;
                     conn.end();
                 })
             });
-
     })
         .on('error', function (err) {
             console.log(chalk.red('Fail! 服务器连接失败.\n'));

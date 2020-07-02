@@ -1,26 +1,27 @@
-var Client = require('ssh2').Client;
+let Client = require('ssh2').Client;
 const scpClient = require('scp2');
 const ora = require('ora');
 const chalk = require('chalk');
 const spinner = ora('正在发布到' + ( process.env.NODE_ENV === 'prod' ? '生产' : '测试') + '服务器上...');
-const conn = new Client();
+
 let config = require('./config');
+const conn = new Client();
+
 const readline = require('readline');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
-})
+});
 
-
-const questions = ['Please input publish environment(test\\prod\\yanshi): ', 'Please input server username: ', 'Please input server password: ']
-const linelimit = 3; // 用户输入的行数
+const questions = ['Please input publish environment(test\\prod\\dev): ', 'Please input server username: ', 'Please input server password: '];
+const linelimit = 3;
 let inputArr = [];
 let index = 0;
 let server=null;
 
 function runQueLoop() {
     if (index === linelimit) {
-        server = config[inputArr[0]] //通过id匹配环境
+        server = config[inputArr[0]]
         server.username = inputArr[1];
         server.password = inputArr[2];
         deployFile();
@@ -32,16 +33,14 @@ function runQueLoop() {
         runQueLoop()
     })
 }
-
-
 runQueLoop();
 function deployFile() {
     let { path , rootPath , rootFolder } = server ;
     let currentTime = new Date().toLocaleDateString();
     let cmd = `cd ${rootPath}\n
-mkdir -p _backUp/${rootFolder}_${currentTime}\n 
-cp -r ${path} ${rootPath}_backUp/${rootFolder}_${currentTime}/\n 
-rm -rf ${path}`;
+                mkdir -p _backUp/${rootFolder}_${currentTime}\n 
+                cp -r ${path} ${rootPath}_backUp/${rootFolder}_${currentTime}/\n 
+                rm -rf ${path}`;
 
     conn.on('ready', function () {
         conn.exec( cmd,

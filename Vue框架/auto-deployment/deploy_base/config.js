@@ -5,20 +5,20 @@ const SERVER_CONFIG = {
     dev: {
         id: 'dev',
         name: '测试环境',
-        host: '10.10.2.10',
+        host: '10.xx.xx.xx',
         port: 22,
         username: 'root',
-        password: 'user****',
-        path: '/home/test/test1'
+        password: 'user*****',
+        path: '/root/user/test/dev/',
     },
     prod: {
         id: 'prod',
         name: '开发环境',
-        host: '10.10.2.10',
+        host: '10.xx.xx.xx',
         port: 22,
         username: 'root',
-        password: 'user****',
-        path: '/home/test/test2'
+        password: 'user*****',
+        path: '/root/user/test/prod/',
     }
 };
 module.exports = SERVER_CONFIG;
