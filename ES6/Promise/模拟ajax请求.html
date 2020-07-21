@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    const getJSON = function (url) {
+        const promise  = new Promise( (resolve , reject) => {
+            const handler = function () {
+                if(this.readyState !== 4){
+                    return ;
+                }
+                if (this.status === 200){
+                    resolve(this.response);
+                }else {
+                    reject( new Error( this.statusText ) );
+                }
+            };
+            const client = new XMLHttpRequest();
+            client.open('GET',url);
+            client.onreadystatechange = handler;
+            client.responseType = 'json';
+            client.setRequestHeader('Accept' , 'application/json');
+            client.send();
+        } );
+        return promise;
+    };
+
+    let url = 'https://www.fastmock.site/mock/978bcdf852be09fc090a503ca18fab1f/cyber/get-device-detail';
+    getJSON(url).then((res) => {
+        console.log("ajax请求成功");
+        console.log(res);
+    } , (res) => {
+        console.log(res);
+    })
+
+</script>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cooling System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="custom/images/favicon.ico?v=2" />
+    <style>
+        html,
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+    </style>
+
+    <script src='../ht-for-web-7.0.8/lib/core/ht.js'></script>
+    <script src='../ht-for-web-7.0.8/lib/plugin/ht-edgetype.js'></script>
+    <script src='../ht-for-web-7.0.8/lib/plugin/ht-obj.js'></script>
+    <!--<script src='../ht-for-web-7.0.8/lib/plugin/ht-vector.js'></script>-->
+    <!--<script src='../ht-for-web-7.0.8/lib/core/ht-ui.js'></script>-->
+
+    <script>
+        function init() {
+            dataModel = new ht.DataModel();
+            graphView = new ht.graph.GraphView(dataModel);
+            graphView.addToDOM();
+
+
+            ht.Default.xhrLoad('displays/-ing/HT结构图.json', function (text) {
+                var json = ht.Default.parse(text);
+                if (json.title) document.title = json.title;
+                dataModel.deserialize(json);
+                graphView.fitContent(true);
+                view = graphView.getView();
+
+                popUps = dataModel.getDataByTag('popUps');
+
+                view.addEventListener('mousedown', function (e) {
+                    var node = graphView.getDataAt(e);
+                    if (!node) {
+                        popUps.s('2d.visible', false);
+                        return;
+                    }
+                    node.s('select.width', 0);
+                });
+
+
+                ring = dataModel.getDataByTag('ring');
+                belt = dataModel.getDataByTag('belt');
+                gear1 = dataModel.getDataByTag('gear1');
+                gear2 = dataModel.getDataByTag('gear2');
+                liquid = dataModel.getDataByTag('liquid');
+                pole2 = dataModel.getDataByTag('pole2');
+                piston = dataModel.getDataByTag('piston');
+                light1 = dataModel.getDataByTag('light1');
+                light2 = dataModel.getDataByTag('light2');
+                screw1 = dataModel.getDataByTag('screw1');
+                screw2 = dataModel.getDataByTag('screw2');
+                pole1 = dataModel.getDataByTag('pole1');
+                key = dataModel.getDataByTag('key');
+                triangle = dataModel.getDataByTag('triangle');
+                brain1 = dataModel.getDataByTag('brain1');
+                brain2 = dataModel.getDataByTag('brain2');
+                fan = dataModel.getDataByTag('fan');
+
+
+                var interval = 50;
+                var MAX_WIDTH = liquid.getWidth();
+                var ring_w = ring.getWidth();
+                var piston_x = piston.getX();
+                var key_y = key.getY();
+                var round = 2;
+                // 控制扇叶的转速
+                var speed = 0.3;
+                var x1, x2, y1, y2 = 0;
+                // 控制 liquid 节点宽度递增递减 和 piston 活塞的运动方向
+                var direction = 1;
+                // 控制呼吸灯透明度
+                var direction2 = -1;
+                // 控制呼吸灯透明度
+                var direction3 = -1;
+                // 控制钥匙、三角锥、大脑的运动方向
+                var direction4 = -1;
+                // 齿轮运动的位置标记
+                var positionFlag = 0;
+                // number1-3 变化范围 0~100
+                var number1 = dataModel.getDataByTag('number1');
+                var number2 = dataModel.getDataByTag('number2');
+                var number3 = dataModel.getDataByTag('number3');
+                // Mechanical Load 变化范围 0~100
+                var number4 = dataModel.getDataByTag('number4');
+                // Piston Load 85.8 变化范围 0~100
+                var number5 = dataModel.getDataByTag('number5');
+                // Mechanical Temperature 137.4 变化范围 100~200
+                var number6 = dataModel.getDataByTag('number6');
+                // PistonTemperatuer 577.4 变化范围 0~1000
+                var number7 = dataModel.getDataByTag('number7');
+                // 传送带的偏移速度
+                var belt_speed = Math.PI / round * ring_w * interval / 1000;
+                // 齿轮旋转的速度
+                var gear_speed = 2 * Math.PI / round * interval / 1000;
+                // liquid 和 活塞运动的速度
+                var piston_speed = ring_w / ((round * 1000) / (2 * interval));
+
+
+                setInterval(function () {
+                    // 传送带偏移
+                    belt.s('shape.dash.offset', belt.s('shape.dash.offset') - belt_speed);
+
+
+                    // 齿轮旋转
+                    gearRotation = gear2.getRotation();
+                    positionFlag = parseInt(gearRotation / Math.PI);
+                    gear1.setRotation(gear1.getRotation() + gear_speed);
+                    gear2.setRotation(gear2.getRotation() + gear_speed);
+
+
+                    // 判断齿轮旋转的位置
+                    if (positionFlag % 2 === 0) {
+                        direction = 1;
+                    } else {
+                        direction = -1;
+                    }
+                    // 活塞运动
+                    liquid.setWidth(liquid.getWidth() - piston_speed * direction);
+                    piston.setX(piston.getX() + piston_speed * direction);
+
+
+                    // 杆运动
+                    var x1 = screw1.getX();
+                    var y1 = screw1.getY();
+                    var x2 = screw2.getX();
+                    var y2 = screw2.getY();
+                    pole1.setPosition((x1 + x2) / 2, (y1 + y2) / 2);
+                    pole1.setWidth(x2 - x1);
+                    pole1.setRotation(Math.atan((y2 - y1) / (x2 - x1)));
+
+
+                    // 钥匙、三角锥、脑袋的漂浮运动
+                    if (key.getY() > key_y || key.getY() < -83) {
+                        direction4 = -direction4;
+                    }
+                    key.setY(key.getY() + 1 * direction4);
+                    triangle.setY(triangle.getY() + 1 * direction4);
+                    brain1.setY(brain1.getY() + 0.9 * (-direction4));
+                    brain2.setY(brain2.getY() + 0.9 * (-direction4));
+
+
+                    // 风扇运动
+                    fan.a('fan.rotation', fan.a('fan.rotation') + speed);
+                }, interval);
+
+
+                var numbers = new Array(number1, number2, number3, number4, number5, number6, number7);
+                setInterval(function () {
+                    for (var i = 0; i < 7; i++) {
+                        numbers[i].a('ht.value', numbers[i].a('ht.value') + Math.random());
+                        if (i < 5) {
+                            if (numbers[i].a('ht.value') > 100) { numbers[i].a('ht.value', 0); }
+                        } else if (i === 5) {
+                            if (numbers[i].a('ht.value') > 200) { numbers[i].a('ht.value', 0); }
+                        } else {
+                            if (numbers[i].a('ht.value') > 1000) { numbers[i].a('ht.value', 0); }
+                        }
+                    }
+                }, interval * 5);
+
+
+                setInterval(function () {
+                    light1.s('opacity', light1.s('opacity') + 0.1 * direction2);
+                    light2.s('opacity', light2.s('opacity') + 0.1 * direction2);
+                    if (light1.s('opacity') > 1 || light1.s('opacity') < 0.4) {
+                        direction2 = -direction2;
+                    }
+                }, interval * 4);
+
+            });
+        }
+    </script>
+</head>
+
+<body onload='setTimeout(init, 300)'>
+</body>
+
+</html>
