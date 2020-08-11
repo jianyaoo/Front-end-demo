@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // function loadUrls(urls) {
+    //     const textPromises = urls.map( (url) => {
+    //         return fetch(url).then(response =>  response.text())
+    //     } );
+    //     textPromises.reduce( (chain , textPromise) => {
+    //         return chain.then( () => textPromise ).then(text => console.log(text))
+    //     }  )
+    // }
+    // async function loadUrls(urls) {
+    //     for (const url of urls) {
+    //         const response = await fetch(url);
+    //         console.log(await response.text());
+    //     }
+    // }
+
+    async function loadUrls(urls) {
+        // 并发读取远程URL
+        const textPromises = urls.map(async url => {
+            const response = await fetch(url);
+            return response.text();
+        });
+
+        // 按次序输出
+        for (const textPromise of textPromises) {
+            console.log(await textPromise);
+        }
+    }
+
+    let urls = ['https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz',
+    'https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=上海']
+    loadUrls(urls);
+</script>
+</body>
+</html>

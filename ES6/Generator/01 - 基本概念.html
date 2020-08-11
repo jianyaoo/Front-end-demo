@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function* generator() {
+        yield 'hello';
+        yield 'Generator';
+        return 'ending';
+    }
+    let ge = generator();
+    let one = ge.next();
+    let two = ge.next();
+    let three = ge.next();
+    let four = ge.next();
+    let five = ge.next();
+    console.log(one);
+    console.log(two);
+    console.log(three);
+    console.log(four);
+    console.log(five);
+</script>
+</body>
+</html>
