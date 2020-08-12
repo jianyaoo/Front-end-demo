@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="clickBtn()">打印</button>
+<script>
+    function clickBtn(){
+        console.log('点击了按钮');
+    }
+    // 正常打印数据，并打印出最新的日期
+    function mainThread(){
+        console.log('打印A');
+        console.log('打印B');
+        let date;
+        for (let i = 0 ; i < 10000000 ; i++){
+            let dateitem = new Date();
+            date = dateitem
+        }
+        console.log('打印最新的日期');
+        console.log(date);
+        console.log('打印C');
+        let pElem = document.createElement('p');
+        pElem.textContent = 'This is a newly-added paragraph.';
+        document.body.appendChild(pElem);
+        console.log('This is a newly-added paragraph');
+        console.log('打印D');
+    }
+    mainThread()
+
+</script>
+</body>
+</html>

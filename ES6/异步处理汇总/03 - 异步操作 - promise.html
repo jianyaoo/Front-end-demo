@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="clickBtn()">打印</button>
+<script>
+    let p = new Promise( ((resolve) => {
+        setTimeout( function () {
+            let data;
+            for (let i = 0 ; i < 10000000 ; i++){
+                let dateItem = new Date();
+                data = dateItem;
+            }
+            resolve(data);
+        } , 100 )
+    }) )
+
+    // 正常顺序打印数据，并打印出最新的日期
+    function mainThread(){
+        console.log('打印A');
+        console.log('打印B');
+        // 使用promise异步操作函数 - 此时不会阻塞后面函数后面代码的执行
+        p.then((value) => {
+            console.log("获取到了新数据");
+            console.log(value);
+        });
+
+        // 直接打印CD
+        console.log('打印C');
+        console.log('打印D');
+        let pElem = document.createElement('p');
+        pElem.textContent = 'This is a newly-added paragraph.';
+        document.body.appendChild(pElem);
+        console.log('This is a newly-added paragraph');
+    }
+
+    mainThread()
+
+</script>
+</body>
+</html>

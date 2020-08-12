@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="box"></div>
+</body>
+<script>
+    function move(ele, direction, target, cb) {
+        function fn() {
+            let start = parseInt(getComputedStyle(ele, null)[direction]);
+            let dis = (target-start)/Math.abs(target-start);
+            let speed = 5 * dis;
+            start = start + speed;
+            ele.style[direction] = start + "px";
+            if (start === target) {
+                console.log("到达目标点");
+                cb && cb();
+            } else {
+                window.requestAnimationFrame(fn);
+            }
+        }
+        fn();
+    }
+    let box = document.querySelector(".box");
+
+
+    // 回调地狱；
+    move(box, "left", 200, function () {
+        move(box, "top", 200,function(){
+            move(box, "left", 0,function(){
+                move(box,"top",0,function(){
+                    console.log("运动完成");
+                });
+            });
+        });
+    });
+
+
+
+
+</script>
+
+</html>

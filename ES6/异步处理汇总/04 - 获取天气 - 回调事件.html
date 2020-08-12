@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function getCityWeather(url , callBack) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET',url);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (this.readyState !== 4) return ;
+            if (this.status === 200){
+                let resData = JSON.parse(this.response);
+                console.log(resData);
+                if (callBack) callBack();
+            }
+        }
+    }
+    // 需求：依次输出北京、上海、天津的天气情况
+    getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz', function () {
+        getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=上海',function () {
+            getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=天津')
+        })
+    });
+
+</script>
+</body>
+</html>

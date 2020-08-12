@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function getCityWeatherThunk(url) {
+        return function (fn) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET',url);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Accept' , 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                let data , error ;
+                if (this.readyState !== 4) return ;
+                if (this.status === 200){
+                    data = this.response;
+                }else {
+                    error = new Error(this.statusText);
+                }
+                fn(error,data);
+            }
+        }
+    }
+
+    function* generator() {
+        let data1 = yield getCityWeatherThunk('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz');
+        console.log(data1);
+        let data2 = yield getCityWeatherThunk('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=上海');
+        console.log(data2);
+        let data3 = yield getCityWeatherThunk('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=天津');
+        console.log(data3);
+    }
+
+    function autoRun(gen) {
+        const g = gen();
+        function next(error , data) {
+            if (error) return g.throw(error);
+            const res = g.next(data);
+            if (res.done) return ;
+            res.value(next);
+        }
+        next();
+    }
+    autoRun(generator);
+
+
+
+</script>
+</body>
+</html>

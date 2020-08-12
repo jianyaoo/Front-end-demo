@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function getJSON(url , data){
+        return new Promise(((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET',url);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Accept' , 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (this.readyState !== 4) return ;
+                if (this.status === 200){
+                    if (data){
+                        console.log("上次执行结果");
+                        console.log(data);
+                    }
+                    return resolve(this.response);
+                }
+                reject(new Error(this.statusText));
+            }
+        }))
+    }
+
+    async function getWeather() {
+        const data1 = await getJSON('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz');
+        const data2 = await getJSON('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=上海',data1);
+        console.log(data1);
+        console.log(data2);
+        console.log("执行进行中")
+        return '执行结束'
+    }
+
+    getWeather().then((resolve) => {
+        console.log(resolve);
+    });
+    // console.log(getWeather());
+</script>
+</body>
+</html>

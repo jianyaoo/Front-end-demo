@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function getCityWeather(url , data){
+        return new Promise(((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET',url);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Accept' , 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (this.readyState !== 4) return ;
+                if (this.status === 200){
+                    if (data){
+                        console.log("上次执行结果");
+                        console.log(data);
+                    }
+                    return resolve(this.response);
+                }
+                reject(new Error(this.statusText));
+            }
+        }))
+    }
+
+    getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=北京')
+        .then(function (value) {
+            return getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=上海',value);
+        })
+        .then(function (value) {
+            return  getCityWeather('https://tianqiapi.com/api?version=v6&appid=78248274&appsecret=ey9wDoDz&city=天津',value);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+</script>
+</body>
+</html>
